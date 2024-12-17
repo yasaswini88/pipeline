@@ -28,7 +28,11 @@ jobs:
           ./mvnw clean package
 
       - name: Verify Build Artifacts
-        run: ls -la target/
+        run: |
+          ls -la target/
+          pwd
+          
+     
 
   deploy:
     needs: build
