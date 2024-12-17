@@ -43,8 +43,6 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.EC2_SSH_KEY }}
 
-          
-
       - name: Deploy to EC2
         env:
           EC2_HOST: ${{ secrets.EC2_HOST }}
@@ -72,5 +70,3 @@ jobs:
         run: |
           echo "Fetching application logs from EC2..."
           ssh -o StrictHostKeyChecking=no $EC2_USER@$EC2_HOST "tail -n 20 /home/ec2-user/pipeline/app.log"
-
-
