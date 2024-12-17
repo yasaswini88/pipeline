@@ -49,7 +49,7 @@ jobs:
 
       - name: Deploy to Heroku
         env:
-          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+          HEROKU_API_KEY: ${{ secrets.HRKU-7b3dd8c2-b613-4438-b29b-b6f3bbc4e848 }}
         run: |
           heroku deploy:jar target/*.jar --app springboot-ci-demo
 
