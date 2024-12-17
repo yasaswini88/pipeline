@@ -49,10 +49,26 @@ jobs:
           EC2_USER: ${{ secrets.EC2_USER }}
         run: |
           echo "Deploying to EC2 Instance..."
+
+          # Transfer JAR file to EC2
           scp -o StrictHostKeyChecking=no -r target/*.jar $EC2_USER@$EC2_HOST:/home/ec2-user/pipeline/
+
+          # Start the Spring Boot application
           ssh -o StrictHostKeyChecking=no $EC2_USER@$EC2_HOST << 'EOF'
-            echo "Starting the application..."
+            echo "Stopping any existing application..."
             pkill -f "java -jar" || true
-            nohup java -jar /home/ec2-user/pipeline/*.jar > app.log 2>&1 &
+
+            echo "Starting the new application..."
+            nohup java -jar /home/ec2-user/pipeline/*.jar > /home/ec2-user/pipeline/app.log 2>&1 &
+            echo "Application started successfully!"
           EOF
+
+      - name: Verify Application Logs
+        env:
+          EC2_HOST: ${{ secrets.EC2_HOST }}
+          EC2_USER: ${{ secrets.EC2_USER }}
+        run: |
+          echo "Fetching application logs from EC2..."
+          ssh -o StrictHostKeyChecking=no $EC2_USER@$EC2_HOST "tail -n 20 /home/ec2-user/pipeline/app.log"
+
 
